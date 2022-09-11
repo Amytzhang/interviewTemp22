@@ -1,0 +1,41 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <meta http-equiv="X-UA-Compatible" content="ie=edge">
+    <title>Document</title>
+</head>
+
+<body>
+    <script>
+        /*
+         *力扣 628 找出由三个数组成的最大乘积，并输出这个乘积
+         *@param {*} params
+         */
+        var maximumProduct = function(nums) {
+            let sum = 0
+            let n = nums.length
+            if (nums.length === 3) {
+                sum = nums[n - 1] * nums[n - 2] * nums[n - 3]
+            }
+            nums.sort((a, b) => {
+                    return a - b
+                })
+                /*
+                 * 如果只有一个负数，那么取整数最高的三位（数组后三位）
+                 * 如果这个数组前两位数是负数（负负得正,在负整数混合的情况下,只考虑最小（负数越小，绝对值越大）的两位负数的乘积）,那么比较其与最高位的三位数的前两位的乘积大小
+                 * 如果都是负数，也是取最后三位
+                 *@param {*} params
+                 */
+            sum = Math.max(nums[n - 1] * nums[0] * nums[1], nums[n - 1] * nums[n - 2] * nums[n - 3])
+            console.log(sum)
+            return sum
+
+        };
+        maximumProduct([-100, -98, -1, -2, -3, -4])
+    </script>
+</body>
+
+</html>

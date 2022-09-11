@@ -1,0 +1,26 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <meta http-equiv="X-UA-Compatible" content="ie=edge">
+    <title>Document</title>
+</head>
+
+<body>
+    <script>
+        var lengthOfLastWord = function(s) {
+            let list = s.split(' ')
+            let i = list.length - 1
+            while (list[i].length == 0 && i > 0) {
+                i--
+            }
+            console.log(list[i].length)
+            return list[i].length
+        };
+        lengthOfLastWord("   fly me   to   the moon  ")
+    </script>
+</body>
+
+</html>

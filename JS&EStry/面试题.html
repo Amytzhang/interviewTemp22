@@ -1,0 +1,64 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <meta http-equiv="X-UA-Compatible" content="ie=edge">
+    <title>Document</title>
+</head>
+
+<body>
+    <script>
+        function flat(list) {
+            if (Object.keys(list).length == 1) {
+                return [list.left, list.right, list.val]
+            }
+            if (Object.keys(list).indexOf('left')) {
+                this.flat(list.left)
+            }
+            if (Object.keys(list).indexOf('right')) {
+                this.flat(list.right)
+            }
+        }
+
+        function show(arr) {
+            let arrList = []
+            if (arr instanceof Object) {
+                let left = arr.left ? this.flat(arr.left) : []
+                console.log('this.flat(arr.left) ', arr.left)
+                let val = [arr.val]
+                let right = arr.right ? this.flat(arr.right) : []
+                arrList.concat(left)
+                arrList.concat(right)
+                arrList.concat(val)
+            }
+            return arrList
+        }
+        let example = {
+            'left': {
+                'left': {
+                    'val': 1
+                },
+                'right': {
+                    'left': {
+                        'val': 3
+                    },
+                    'right': {
+                        'val': 5
+                    },
+                    'val': 9
+                },
+                'val': 6
+            },
+            'right': {
+                'val': 7
+            },
+            'val': 4
+        }
+        let result = this.show(example)
+        console.log(result)
+    </script>
+</body>
+
+</html>

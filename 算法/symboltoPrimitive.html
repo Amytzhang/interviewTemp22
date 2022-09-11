@@ -1,0 +1,28 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <meta http-equiv="X-UA-Compatible" content="ie=edge">
+    <title>Document</title>
+</head>
+
+<body>
+    <script>
+        let obj = {
+            [Symbol.toPrimitive](hitn) {
+                console.log(hitn)
+            }
+        }
+        Number(obj)
+        String(obj)
+        Boolean(obj)
+        10 + obj
+        10 - obj
+        let result = 100 + true + 21.2 + null + undefined + "tent" + [] + null + 9 + false;
+        console.log('result:', result)
+    </script>
+</body>
+
+</html>

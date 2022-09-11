@@ -1,0 +1,45 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <meta http-equiv="X-UA-Compatible" content="ie=edge">
+    <title>async/await:是promise+generator的语法糖</title>
+</head>
+
+<body>
+    <script>
+        // async修饰的函数，默认返回值会变成一个promise 实例
+        //必须在函数种使用await,而且当前函数需要经过asynce修饰
+        let p1 = new Promise((resolve, reject) => {
+            resolve(100)
+            reject(200)
+        })
+        async function fn4() {
+            // await后面放置的是promise实例【如果不是，则默认变为状态是成功，值是这个值的promise实例】
+            // 把当前上下文中种，await"下面的代码"作为一个“异步微任务”，放到webAPI中监听，监听实例的状态
+            //+ 如果状态成功，把其下面的代码执行挪至EventQueue中排队
+            //+如果状态失败，下面代码不执行，await不做失败处理
+            //    ++捕获await异常用 try{let value = await p1} catch(err){}
+            let value = await p1
+            console.log('输出：', value)
+        }
+        fn4()
+            //  Promise {<fulfilled>: 1}
+            // 输出： 100
+        async function fn() {
+            return 1
+        }
+        console.log(fn())
+            // Promise[[Prototype]]: Promise[[PromiseState]]: "fulfilled"[[PromiseResult]]: 1
+            // async function fn1() {
+            //     console.log(num)
+            //     return 2
+            // }
+            // console.log(fn1())
+            // Promise[[Prototype]]: Promise  [[PromiseState]]: "rejected"  [[PromiseResult]]: ReferenceError: num is not defined at fn1
+    </script>
+</body>
+
+</html>

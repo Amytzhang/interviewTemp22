@@ -1,0 +1,41 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <meta http-equiv="X-UA-Compatible" content="ie=edge">
+    <title>proxy 关于immmer.js知道的特性</title>
+</head>
+
+<body>
+    <script>
+        /*
+              注意⚠️⚠️⚠️：如果一个对象的层级比较深，而且内部会有引用类型的属性值时。
+              如果给当前对象生成代理并修改内层属性值时，
+              如果修改的是最外层属性的值时，是会触发 set 方法，
+              但是如果修改最外层某个属性值为对象的属性的值时，
+              并不会触发 set 方法
+              */
+        const handle = {
+            get(target, key) {
+                // 这里的 target 就是 Proxy 的第一个参数对象
+                console.log('proxy get key', key)
+                return '返回1'
+            },
+            set(target, key, value) {
+                console.log('proxy set key', value)
+            }
+        }
+        const target = {
+            a: {
+                b: 1
+            }
+        }
+        const p = new Proxy(target, handle)
+        p.a = 2 // 所有设置操作都被转发到了 set 方法内部
+        p.a.b = 9 // 触发的是get而非set
+    </script>
+</body>
+
+</html>

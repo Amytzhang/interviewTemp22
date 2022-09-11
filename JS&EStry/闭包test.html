@@ -1,0 +1,123 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <meta http-equiv="X-UA-Compatible" content="ie=edge">
+    <title>闭包测试</title>
+    <style>
+        body,
+        html {
+            width: 100%;
+            height: 100%;
+            padding: 0;
+            margin: 0;
+            background-color: bisque;
+            color: coral;
+        }
+        
+        .content {
+            width: 100%;
+            height: 100%;
+            padding: 10px 20px;
+            box-sizing: border-box;
+            display: flex;
+            justify-content: space-between;
+        }
+        
+        .left-note {
+            flex: 1;
+        }
+        
+        .left-note ol li,
+        ul li {
+            height: 25px;
+            line-height: 25px;
+        }
+        
+        .right-example {
+            flex: 1;
+            height: 100%;
+            background-color: rgba(241, 160, 131, 0.3);
+        }
+        
+        .example1 {
+            width: 100%;
+            height: 300px;
+            display: flex;
+            flex-direction: row;
+            justify-content: center;
+        }
+        
+        .btn {
+            height: 25px;
+            width: 100%;
+            background-color: coral;
+            margin-top: 10px;
+        }
+    </style>
+</head>
+
+<body>
+    <div class="content">
+        <div class="left-note">
+            <h1>闭包应用：循环中的闭包处理方案</h1>
+            <h2>循环绑定</h2>
+            <ol>
+                <li>自定义属性</li>
+                <li>闭包的N中方案[含let处理机制]</li>
+                <li>事件委托</li>
+            </ol>
+
+            <h2>循环中的定时器</h2>
+            <ul>
+                <li>闭包的处理方案</li>
+                <li>
+                    <span>定时器本身的处理方案:</span><br>
+                    <span>
+                      const fn = (i) => { return function() { console.log(i) } } <br/>
+                      for (let i = 0; i < 10; i++) { setTimeout(fn(i), i * 1000) }
+                  </span>
+                </li>
+
+            </ul>
+        </div>
+        <div class="right-example ">
+            <h1>example</h1>
+            <div class="example1">
+                <div class="btn"></div>
+                <div class="btn"></div>
+                <div class="btn"></div>
+                <div class="btn"></div>
+                <div class="btn"></div>
+            </div>
+        </div>
+    </div>
+    <script>
+        /*
+         *
+         *@param {*} params
+         */
+        var btnList = document.querySelectorAll('.btn');
+        for (var i = 0; i < btnList.length; i++) {
+            btnList[i].onclick = function() {
+                console.log(`当前点击按钮的索引：${i}`)
+            }
+        }
+        /*
+         *定时器
+         *@param {*} params
+         */
+        // const fn = (i) => {
+        //     return function() {
+        //         console.log(i)
+        //     }
+        // }
+        // for (let i = 0; i < 10; i++) {
+        //     setTimeout(fn(i), i * 1000)
+        // }
+    </script>
+</body>
+
+</html>

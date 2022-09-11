@@ -1,0 +1,83 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Document</title>
+</head>
+<body>
+  <script>
+   function zuhe(num) {
+  let all = 0
+  let first =1
+  for(var i=1;i<num || i=== num;i++) {
+     first = first*i
+  }
+  
+  for(var k=1;k<num;k++) {
+    console.log('k:', k)
+    let second =1
+    console.log('second1:',second)
+    for(let j=num+1-k;j>0;j--){
+      console.log('j:',j)
+        second= second*j
+        console.log('second2:',second)
+    }
+    all = all + first/second
+  }
+  
+    console.log(all)
+  
+  return all
+}
+var numSub = function(s) {
+    let tr = s.trim()
+    let list=[] 
+    list= tr.split('0')
+    if(list.length === 0) return 0
+    let count = 0
+    list.splice(0,1)
+    list.map(item=> {
+        if(item.length>2) {
+          count = count + zuhe(item.length)
+        } else {
+            count +=3
+        }
+    })
+    console.log(count)
+    return count
+
+}
+console.log(numSub('0110111'))
+    //  var a = 0
+    //   var b = 0
+    //   function A (a) {
+    //     A = function (b) {
+    //       console.log('a', a)
+    //       console.log('b', b)
+    //       console.log(a + b++)
+    //     }
+    //     console.log(a++)
+    //   }
+    //   console.log('A', a)
+    //   A(1)
+    //   console.log('A', a)
+    //   A(2)
+    //   console.log('A', a)
+    //   A(3)
+    //   console.log('A', a)
+    //   A(4)
+//       let a = {n : 1};
+// let b = a;
+
+// a.x = a = {n: 2};
+// console.log(a.x)
+// console.log(b)
+// console.log(b.x)
+    // if(false){
+    //   var a = 1;
+    //   let b = 2;
+    // }
+  </script>
+</body>
+</html>

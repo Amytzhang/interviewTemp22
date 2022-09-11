@@ -1,0 +1,48 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+    <meta charset="UTF-8">
+    <meta http-equiv="X-UA-Compatible" content="IE=edge">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Document</title>
+</head>
+
+<body>
+    <script>
+        const arr = [1, 15, 'string', true, [3, 5, [17, 6, 88, [4, 28]]], {
+            name: '小明是个捣蛋鬼'
+        }]
+        arr.forEach((item, index) => {
+            if (Array.isArray(item)) {
+                arr[index] = item.flat(Infinity)
+            }
+        })
+
+        console.log(arr)
+
+        var a = 1
+
+        function fn1() {
+            var a = 2
+            alert(this.a + a)
+        }
+
+        function fn2() {
+            var a = 10
+            fn1()
+        }
+        fn2()
+
+        var fn3 = function() {
+            this.a = 3
+        }
+        fn3.prototype = {
+            a: 4
+        }
+        var Fn3 = new fn3()
+        fn1.call(Fn3)
+    </script>
+</body>
+
+</html>

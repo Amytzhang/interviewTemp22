@@ -1,0 +1,51 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <meta http-equiv="X-UA-Compatible" content="ie=edge">
+    <title>call实现</title>
+</head>
+
+<body>
+    <script>
+        Function.prototype.myCall = function(context, ...args) {
+            if (!context || context === null) {
+                context = window
+            }
+            let fn = Symbol();
+            context[fn] = this;
+            delete fn
+            return context[fn](...args)
+        }
+        const fn = function fn(x, y) {
+            console.log(this, x, y)
+            return x + y;
+        };
+        let obj = {
+            name: 'obj',
+            xxx: 100,
+            result: ''
+        }
+        let res = fn.myCall(obj, 10, 20)
+        console.log('myCall:', res, obj)
+
+        Function.prototype._bind = function(context, ...args) {
+            let fn = this
+            return function() {
+                let result = fn.call(context, ...args)
+                return result
+            }
+        }
+
+        let obj1 = {
+            a: 2,
+            b: 4
+        }
+        let res2 = fn.bind(obj1, 1, 2)
+        console.log(res2, res2(), obj1)
+    </script>
+</body>
+
+</html>

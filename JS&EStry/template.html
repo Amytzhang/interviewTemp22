@@ -1,0 +1,31 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <meta http-equiv="X-UA-Compatible" content="ie=edge">
+    <title>实现模板字符串解析功能</title>
+</head>
+
+<body>
+    <script>
+        let template = '我是{{name}}，年龄{{age}}，性别{{sex}}';
+        let data = {
+            name: '姓名',
+            age: 18
+        }
+
+        function render(template, data) {
+            let computed = template.replace(/\{\{(\w+)\}\}/g, function(match, key) {
+                console.log(match, key)
+                return data[key];
+            });
+            return computed;
+        }
+        let result = render(template, data); // 我是姓名，年龄18，性别undefined
+        console.log(result)
+    </script>
+</body>
+
+</html>

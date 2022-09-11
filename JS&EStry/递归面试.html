@@ -1,0 +1,28 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <meta http-equiv="X-UA-Compatible" content="ie=edge">
+    <title>递归面试题</title>
+</head>
+
+<body>
+    <script>
+        /*
+            *假如楼梯有n个台阶，每次可以走1个或2个台阶，请问走完这n个台阶有几种走法
+            *@param {*} params
+            1阶 1; 2阶 2; 3阶 3 ;4阶 5 ;5阶 8
+            */
+        function steps(n) {
+            if (n == 1) return 1
+            if (n == 2) return 2
+            return steps(n - 1) + steps(n - 2)
+        }
+        let allSteps = steps(10)
+        console.log('allsteps:', allSteps)
+    </script>
+</body>
+
+</html>

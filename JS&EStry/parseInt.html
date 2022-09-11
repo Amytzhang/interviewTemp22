@@ -1,0 +1,49 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Document</title>
+</head>
+<body>
+  <script>
+    let arr = [10.18,0,10,10,23]
+    /*
+    parserint(string,radix)
+    string --->tostring
+    radix
+    2-36 以外的，不在者之间运行的结果NAN，
+    例外：
+      1> 0以十进制  
+      2> 0x /0X十六进制
+      3> 1-9 解析成十进制数
+    parseInt("10.18",0) 十进制  10
+    parseInt("0",1) NaN
+    parseInt("10",2) 2
+    parseInt("10",3) 2 进制 0，1, 2  
+    parseInt("23",4) 11  进制 0，1，2，3  
+    */
+    arr = arr.map(parseInt)
+    console.log(arr)
+console.log(parseInt('23',10))
+    console.log(
+      parseInt("0xF", 16),
+      parseInt("F", 16),
+      parseInt("17", 8),
+      parseInt(021, 8),
+      parseInt("015", 10),
+      parseInt(15.99, 10),
+      parseInt("15,123", 10),
+      parseInt("FXX123", 16),
+      parseInt("1111", 2),
+      parseInt("15 * 3", 10),
+      parseInt("15e2", 10),
+      parseInt("15px", 10),
+      parseInt("12", 13)
+    )
+    console.log(['10', '10', '10', '10'].map(
+      parseInt
+    ))
+  </script>
+</body>
+</html>

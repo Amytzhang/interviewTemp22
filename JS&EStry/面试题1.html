@@ -1,0 +1,40 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta http-equiv="X-UA-Compatible" content="IE=edge">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Document</title>
+  <style>
+    .divdemo {
+      width: 100px;
+      height: 100px;
+      background-color: aqua;
+    }
+  </style>
+</head>
+<body> 
+   <div class="divdemo"id="i"/> 
+  </body> 
+   <script> 
+  
+  function showName() { 
+    console.log('Toutiao'); 
+  }  
+  showName();
+  function showName() { 
+     console.log('OceanEngine'); 
+   } 
+   showName(); // ---- 10 
+   var myName = "abc" ;
+   function showName2(){ 
+     console.log(myName); 
+     var myName = "aabbcc" 
+      console.log(myName); 
+    } showName2(); // ---- 18 
+    let myName3= 'toutiao' 
+    {  console.log(myName3) 
+      let myName3= 'oceanengine' 
+     }
+     </script>
+</html>

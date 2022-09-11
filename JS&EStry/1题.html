@@ -1,0 +1,170 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Document</title>
+</head>
+<body>
+  <script>
+    // console.log(a, b, c); //undefinde,undefinde,undefind
+    // var a = 12,
+    //     b = 13,
+    //     c = 14;
+    // function fn(a) {
+    //     console.log(a, b, c);//10,13,14
+    //     a = 100;
+    //     c = 200;
+    //     console.log(a, b, c); //100,13,200
+    // }
+    // b = fn(10);
+    // // b正确答案undefinde
+    // console.log(a, b, c); //12,13,200
+
+
+    // var i = 0;
+    // function A() {
+    //     var i = 10;
+    //     function x() {
+    //         console.log(i); //10
+    //     }
+    //     return x;
+    // }
+    // var y = A();
+    // y(); 
+    // function B() {
+    //     var i = 20;
+    //     y(); //console.log(10)
+    // }
+    // B();
+    
+
+    // var a=1;
+    // var obj ={
+    //   name:"tom"
+    // }
+    // function fn(){
+    //   var a2 = a;
+    //   obj2 = obj;
+    //   a2 =a;
+    //   obj2.name ="jack";
+    // }
+    // fn();
+    // console.log(a);//1
+    // console.log(obj);//jack
+
+    //函数提升，提升函数声明
+    // var a = 1;
+    // function fn(a){
+    //     console.log(a) //f a(){}
+    //     var a = 2;
+    //     function a(){}
+    // }
+    // fn(a);
+
+
+    // console.log(a); //undefinde
+    // var a=12; 
+    // function fn(){
+    //     console.log(a); //undefind
+    //     var a=13;   
+    // }
+    // fn();   
+    // console.log(a); //12
+    
+    
+    // console.log(a); //undefinde
+    // var a=12;
+    // function fn(){
+    //     console.log(a); //12
+    //     a=13;
+    // }
+    // fn();
+    // console.log(a);//13
+    
+    
+    
+    // console.log(a);//not definded 报一次错
+    // a=12;
+    // function fn(){
+    //     console.log(a); // not definded
+    //     a=13;   
+    // }
+    // fn();
+    // console.log(a); // not definded
+
+
+    // var foo='hello'; 
+    // (function(foo){
+    //    console.log(foo); //hello
+    //    var foo=foo||'world';
+    //    console.log(foo); //hello
+    // })(foo);
+    // console.log(foo); //hello
+
+
+    // {
+    //   function foo() {}
+    //   foo = 1;
+    // }
+    // console.log(foo);//f foo() {}
+
+
+
+    // {
+    //   function foo() {}
+    //   foo = 1;
+    //   function foo() {}
+    // }
+    // // 正确答案 1
+    // console.log(foo); 
+
+
+
+    // {
+    //   function foo() {}
+    //   foo = 1;
+    //   function foo() {}//之前的foo操作都会给全局一份   foo = 1就会由私有变成全局
+    // foo = 2; //还是私有块级作用域
+    // }
+    // // 正确答案 1
+    // console.log(foo); 
+
+    // var x= 1
+    // function func(x,y=function anonymousl() {x=2}) {
+    //   x= 3
+    //   y()
+    //   console.log(x) //2
+    // }
+    // func(5)
+    // console.log(x) // 1
+
+    
+    // var x= 1
+    // function func(x,y=function anonymousl() {x=2}) {
+    //   var x= 3
+    //   y()
+    //   console.log(x) //3
+    // }
+    // func(5)
+    // console.log(x) // 1
+
+
+    // var x= 1
+    // function func(x,y=function anonymousl() {x=2}) {
+    //   var x= 3
+    //   var y = function anonymousl() {x=4}
+    //   console.log(x) //3
+    // }
+    // func(5)
+    // console.log(x) // 1
+    // console.log(foo)
+    // var foo = 1
+    // function foo () {
+    //   console.log(1)
+    // }
+    // console.log(foo)
+    
+  </script>
+</body>
+</html>

@@ -1,0 +1,68 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <meta http-equiv="X-UA-Compatible" content="ie=edge">
+    <title>Document</title>
+</head>
+
+<body>
+    <script>
+        /**
+         * @param {string} s
+         * @return {number}
+         */
+        function getNumber(num) {
+            let result = null
+            switch (num) {
+                case 'I':
+                    result = 1
+                    break;
+                case 'V' || 'v':
+                    result = 5
+                    break;
+                case 'X':
+                    result = 10
+                    break;
+                case 'L':
+                    result = 50
+                    break;
+                case 'C':
+                    result = 100
+                    break;
+                case 'D':
+                    result = 500
+                    break;
+                case 'M':
+                    result = 1000
+                    break;
+            }
+            return result
+        }
+        var romanToInt = function(s) {
+            let list = s.split('')
+            console.log(list)
+            let newNumberList = list.map(item => {
+                console.log(item)
+                let num = getNumber(item)
+                console.log(num)
+                return num
+            })
+            console.log(newNumberList)
+            let sum = newNumberList.reduce(function(total, currentValue, index, arr) {
+                if (index === 0) return total + currentValue
+                console.log(currentValue > arr[index - 1], currentValue - arr[index - 1] * 2)
+                let currNum = currentValue > arr[index - 1] ? currentValue - arr[index - 1] * 2 : currentValue
+                return total + currNum
+
+            }, 0)
+            console.log(sum)
+            return sum
+        };
+        romanToInt("MCMXCIV")
+    </script>
+</body>
+
+</html>

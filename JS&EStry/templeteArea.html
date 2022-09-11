@@ -1,0 +1,46 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta http-equiv="X-UA-Compatible" content="IE=edge">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Document</title>
+</head>
+<body>
+  <script>
+   var funcs = [];
+  // for (var i = 0; i < 3; i++) {
+  //     funcs[i] = (function(i){
+  //         return function() {
+  //             console.log(i);
+  //         }
+  //     }(i))
+  // }
+  // funcs[0](); // 0
+  // for (var i = 0; i < 3; i++) {
+  //   funcs[i] = (function(i){
+  //     return i
+  //   })(i)
+  // }
+  // console.log(funcs)
+  console.log((new Date().getTime()).toString())
+  console.log((new Date(2010, 0, 1)).toString()) 
+  console.log( new Date().getDay().toString())
+  let arr = [];
+  console.log(Object.prototype.toString.call(arr),arr.toString)
+  function * fn () {
+    
+  }
+  console.log(Object.prototype.toString.call(fn))
+  function myFunc() {
+    var x = 0;
+    return (x += 1, x); // the same as return ++x;
+  }
+  console.log('myFunc:',myFunc())
+  console.log('true + ("true" - 0):',true + ("true" - 0))//NAN
+  console.log('undefined + false:',undefined + false)
+
+  
+  </script>
+</body>
+</html>

@@ -1,0 +1,88 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <meta http-equiv="X-UA-Compatible" content="ie=edge">
+    <title>Document</title>
+</head>
+
+<body>
+    <script>
+        // var addTwoNumbers = function(l1, l2) {
+        //     let next = 0
+        //     let newList = []
+        //     if (l1.length > l2.length) {
+        //         newList = l1.map((item, index) => {
+        //             let add = l2[index] ? item + l2[index] + next : item + next
+        //             next = add > 10 || add === 10 ? 1 : 0
+        //             if (add / 10 > 1 || add === 10) {
+        //                 return (add - 10)
+        //             } else {
+        //                 return add
+        //             }
+        //         })
+
+        //     } else {
+        //         newList = l2.map((item, index) => {
+        //             let add = l1[index] ? item + l1[index] + next : item + next
+        //             next = add > 10 || add === 10 ? 1 : 0
+        //             if (add / 10 > 1 || add === 10) {
+        //                 return (add - 10)
+        //             } else {
+        //                 return add
+        //             }
+        //         })
+
+        //     }
+        //     if (next > 0) newList.push(next)
+        //     return newList
+
+        // };
+        // var addTwoNumbers = function(l1, l2) {
+        //     let next = 0
+        //     let newList = []
+        //     if (l1.length > l2.length) {
+        //         for (let index = 0; index < l1.length; index++) {
+        //             let add = l2[index] ? l1[index] + l2[index] + next : l1[index] + next
+        //             next = add > 10 || add === 10 ? 1 : 0
+        //             if (add > 10 || add === 10) {
+        //                 newList.push(add - 10)
+        //             } else {
+        //                 newList.push(add)
+        //             }
+        //         }
+
+        //     } else {
+        //         for (let index = 0; index < l2.length; index++) {
+        //             let add = l1[index] ? l2[index] + l1[index] + next : l2[index] + next
+        //             next = add > 10 || add === 10 ? 1 : 0
+        //             if (add > 10 || add === 10) {
+        //                 newList.push(add - 10)
+        //             } else {
+        //                 newList.push(add)
+        //             }
+        //         }
+
+        //     }
+        //     if (next > 0) newList.push(next)
+        //     return newList
+
+        // };
+        var addTwoNumbers = function(l1, l2) {
+            let str = Number(l1.reverse().join('')) + Number(l2.reverse().join(''))
+            let newList = str.toString().split('').reverse()
+            let result = newList.map(item => {
+                return Number(item)
+            })
+            return result
+
+        };
+        let l1 = [9, 9, 9, 9, 9, 9, 9, 9],
+            l2 = [9, 9, 9, 9]
+        console.log(addTwoNumbers(l1, l2))
+    </script>
+</body>
+
+</html>

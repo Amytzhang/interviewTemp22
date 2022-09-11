@@ -1,0 +1,74 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+    <meta charset="UTF-8">
+    <meta http-equiv="X-UA-Compatible" content="IE=edge">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Document</title>
+</head>
+
+<body>
+    <script>
+        function sum(a) {
+            return a + '*'
+        }
+
+        function toUpper(c) {
+            return c.toUpperCase()
+        }
+
+        function add(str) {
+            return '**' + str + '**'
+        }
+
+        function compose(...fn) {
+            return function(...args) {
+                let propsData = fn.pop()
+                return fn.reduceRight((a, b) => {
+                    console.log(a, b)
+                    return b(a)
+                }, propsData(...args))
+            }
+        }
+
+        function comList(...fn) {
+            return function(...args) {
+                return args.reduce((prev, cur, index, arr) => {
+                    let str = prev + cur
+                    return fn.reduceRight((a, b) => b(a), str)
+                }, '')
+            }
+        }
+        console.log('reslut:', comList(sum, toUpper)('肖战', 'zanzan', 'beijingTv', 'shanghaiTv'))
+
+        function fn1(x) {
+            return x + 1
+        }
+
+        function fn2(x) {
+            return x + 3
+        }
+
+        function fn3(x) {
+            return x + 5
+        }
+        let compose2 = (...fn) => {
+            return fn.reduce((pre, cur) => (...args) => {
+                return pre(cur(...args))
+            })
+        }
+        console.log('reslut:', compose2(fn1, fn2, fn3)(1))
+        let tryArry = [1, 2, 3, 6, 8]
+        let compose3 = (arr) => {
+            return arr.reduce((pre, cur, index, arr1) => {
+                let newVal = pre[index - 1] ? cur + pre[index - 1] : cur
+                pre.push(newVal)
+                return pre
+            }, [])
+        }
+        console.log(compose3(tryArry))
+    </script>
+</body>
+
+</html>

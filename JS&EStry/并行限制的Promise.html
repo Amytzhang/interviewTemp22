@@ -1,0 +1,60 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <meta http-equiv="X-UA-Compatible" content="ie=edge">
+    <title>实现一个带并发限制的异步调度器，保证同时运行的任务最多有两个</title>
+</head>
+
+<body>
+    <script>
+        class Scheduler {
+            constructor(limit) {
+                this.maxCount = limit;
+                this.queue = [];
+                this.runCount = 0;
+            }
+            add(time, order) {
+                const promiseCreator = () => {
+                    return new Promise((resolve, reject) => {
+                        setTimeout(() => {
+                            console.log('排序：', order)
+                            resolve()
+                        }, time)
+                    })
+                }
+                this.queue.push(promiseCreator)
+            }
+            request() {
+                if (!this.queue || !this.queue.length || this.runCount >= this.maxCount) {
+                    return;
+                }
+                this.runCount++;
+                this.queue.shift()().then(() => {
+                    this.runCount--;
+                    this.request()
+                })
+            }
+            taskStart() {
+                for (let i = 0; i < this.maxCount; i++) {
+                    this.request()
+                }
+            }
+        }
+
+        const scheduler = new Scheduler(2);
+        const addTask = (time, order) => {
+            scheduler.add(time, order)
+        }
+        addTask(1000, '1');
+        addTask(500, '2');
+        addTask(300, '3');
+        addTask(400, '4');
+        scheduler.taskStart()
+    </script>
+
+</body>
+
+</html>

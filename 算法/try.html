@@ -1,0 +1,32 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <meta http-equiv="X-UA-Compatible" content="ie=edge">
+    <title>Document</title>
+</head>
+
+<body>
+    <script>
+        function F1() {
+            var a = 100
+            return function() {
+                console.log(a)
+            }
+        }
+
+        function f2(f) {
+            var a = 200
+            console.log(f())
+                // 调用f1里的return 输出a,但函数没有返回值，所以外层console undefined
+        }
+        var f = F1()
+
+
+        f2(f)
+    </script>
+</body>
+
+</html>

@@ -1,0 +1,46 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <meta http-equiv="X-UA-Compatible" content="ie=edge">
+    <title>Document</title>
+</head>
+
+<body>
+    <form action="#" id="form1">
+        Employper name: <input type="text" name="firstname" form="form2"><br>
+        <input type="submit" value="Submit1">
+
+    </form>
+    <form action="#" id="form2">
+
+        <input type="submit" value="Submit2">
+
+    </form>
+    Employper name: <input type="text" name="lastname" form="form2"><br>
+
+
+    <p>The concert took place on <time datetime="P3D">May 15</time>.</p>
+    <p>The concert <time datetime="1914-W15">May </time>.</p>
+    <p>The concert <time datetime="11-12">May </time>.</p>
+    <div id="cheackNumber"></div>
+    <p> <button onclick="checkNumberClick()" type="button">click</button></p>
+    <script>
+        function checkNumberClick() {
+            // localStorage.removeItem('checkNumber')
+            if (typeof(Storage) != 'undefined') {
+                if (localStorage.checkNumber) {
+                    localStorage.checkNumber = Number(localStorage.checkNumber) + 1;
+                } else {
+                    localStorage.checkNumber = 1
+                }
+            }
+            document.getElementById('cheackNumber').innerHTML = "i click" + localStorage.checkNumber + 'items'
+        }
+    </script>
+
+</body>
+
+</html>

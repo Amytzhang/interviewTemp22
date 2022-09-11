@@ -1,0 +1,57 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Document</title>
+</head>
+<body>
+  <script>
+    // var a=10
+    // var b = a
+    // b = 13
+    // console.log(a,b)
+
+    // var c={n:1}
+    // var d = c
+    // d.n = 13
+    // console.log(c.n,d.n)
+
+    // var x = [12,23]
+    // function fn(y) {
+    //   y[0] = 100
+    //   y = [300]
+    //   y[1] = 200
+    //   console.log(y)
+    // }
+    // fn(x)
+    // console.log(x)
+
+    // let xx = 1
+    // function A(yy) {
+    //   let xx= 2
+    //   function B(z) {
+    //     console.log(xx+yy+z)
+
+    //   }
+    //   return B
+    // }
+    // let cc = A(2)
+    // cc(3)
+
+
+    let x =5
+    function fn(x) {
+      return function(y) {
+        console.log(y+(++x))
+      }
+
+    }
+    let f=fn(6)
+    f(7)
+    fn(8)(9)
+    f(10)
+    console.log(x)
+  </script>
+</body>
+</html>

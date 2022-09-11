@@ -1,0 +1,31 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Document</title>
+</head>
+<body>
+  <script>
+  // 1>  arguements
+  var a = 4;
+  function b1(x,y,a){
+    a=3
+    console.log(arguements[2])
+  }
+  a = b1(1,2)
+  //    1.在非严格的情况下arguments跟实参是一一对应的映射关系（一个改变另一个也跟着变），aguements是一个类数组
+  //    2.映射机制是在函数代码执行之前完成的，那会建立了映射就有映射，如果此时没有建立，映射机制后续就不会再有；
+  // arguements[0] -----x-----1
+  // arguements[1] -----y-----2
+  // arguements[2] ---- a----undefined
+  // a=3(代码执行，与arguements没有关系)
+  // 一般用es6的...args代替arguements  
+  
+  function b(...args){
+    console.log(args)
+  }
+  b(1,2,3,4)
+  </script>
+</body>
+</html>

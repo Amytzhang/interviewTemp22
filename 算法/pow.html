@@ -1,0 +1,26 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <meta http-equiv="X-UA-Compatible" content="ie=edge">
+    <title>Document</title>
+</head>
+
+<body>
+    <script>
+        // math.pow()
+        var mySqrt = function(x) {
+            for (let i = 0; i < Math.floor(x / 2) || i === Math.floor(x / 2); i++) {
+                if (i ** 2 == x) {
+                    console.log(i)
+                    return Math.floor(i)
+                }
+            }
+        };
+        let result = mySqrt(8)
+    </script>
+</body>
+
+</html>

@@ -1,0 +1,34 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta http-equiv="X-UA-Compatible" content="IE=edge">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Document</title>
+  <style>
+    iframe {
+      height: 400px;
+      width: 400px;
+      background-color: aquamarine;
+      color: brown;
+    }
+   
+  </style>
+</head>
+<body>
+  <iframe name="iframe1" id="iframe1" frameborder="0" scrolling="auto">
+    <span>yyyy</span>
+  </iframe>
+  <script>
+    var iframe = document.getElementById("iframe1");
+var iwindow = iframe.contentWindow;
+var idoc = iwindow.document;
+       console.log("window",iwindow);//获取iframe的window对象
+       console.log("document",idoc);  //获取iframe的document
+       console.log("html",idoc.documentElement);//获取iframe的html
+       console.log("head",idoc.head);  //获取head
+       console.log("body",idoc.body);  //获取body
+       console.log(iframe.contentDocument.getElementsByTagName('span'))
+  </script>
+</body>
+</html>

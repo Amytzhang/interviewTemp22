@@ -1,0 +1,59 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <meta http-equiv="X-UA-Compatible" content="ie=edge">
+    <title>Document</title>
+</head>
+
+<body>
+    <script>
+        /**
+         * Definition for singly-linked list.
+         * function ListNode(val, next) {
+         *     this.val = (val===undefined ? 0 : val)
+         *     this.next = (next===undefined ? null : next)
+         * }
+         */
+        /**
+         * @param {ListNode} l1
+         * @param {ListNode} l2
+         * @return {ListNode}
+         */
+        var addTwoNumbers = function(l1, l2) {
+            let after = 0;
+            let result = []
+            if (l1.length > l2.length || l1.length === l2.length) {
+                result = l1.map((item, index) => {
+                    let add = l2[index] ? item + l2[index] : item
+                    add = add + after
+                    if (add.toString().length > 1) {
+                        let list = add.toString().split('')
+                        after = Number(list.slice(0, list.length - 1))
+                        return Number(list[list.length - 1])
+                    } else return add
+                })
+
+            } else {
+                result = l2.map((item, index) => {
+                    let add = l1[index] ? item + l1[index] : item
+                    add = add + after
+                    if (add.toString().length > 1) {
+                        let list = add.toString().split('')
+                        after = Number(list.slice(0, list.length - 1))
+                        return Number(list[list.length - 1])
+                    } else return add
+                })
+
+            }
+
+            return result
+
+        };
+        console.log(addTwoNumbers([9, 9, 9, 9, 9, 9, 9], [9, 9, 9, 9]))
+    </script>
+</body>
+
+</html>

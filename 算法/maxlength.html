@@ -1,0 +1,41 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <meta http-equiv="X-UA-Compatible" content="ie=edge">
+    <title>Document</title>
+</head>
+
+<body>
+    <script>
+        var lengthOfLongestSubstring = function(s) {
+            let list = s.split('')
+            let tempStr = ''
+            let max = 0
+            if (list.length === 0) {
+                max = 0
+            } else {
+                let arrayList = list.reduce((num, current, index, arr) => {
+                    let has = tempStr.indexOf(current)
+                    if (has === -1) {
+                        tempStr += current
+                    } else {
+                        tempStr = tempStr.slice(has + 1)
+                        tempStr += current
+                    }
+                    num.push(tempStr.length)
+                    return num
+
+                }, [])
+                max = Math.max.apply(Math, arrayList)
+            }
+            console.log(max)
+
+        };
+        lengthOfLongestSubstring("ssssssssssss2222eeeesdsa")
+    </script>
+</body>
+
+</html>

@@ -1,0 +1,23 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta http-equiv="X-UA-Compatible" content="IE=edge">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Document</title>
+</head>
+<body>
+  <script>
+    let num;
+    console.log('声明未定义变量：',typeof(num))
+    let obj = new Object()
+    console.log('声明明空对象：', typeof(obj))
+    let name = null;
+    console.log('赋值为null的变量：', name==num,typeof(name))
+    let symbol1 = Symbol.for('sym')
+    let symbol2 = Symbol.for('sym')
+    console.log('symbol',symbol1 === symbol2)
+
+  </script>
+</body>
+</html>

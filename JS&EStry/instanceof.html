@@ -1,0 +1,24 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <meta http-equiv="X-UA-Compatible" content="ie=edge">
+  <title>实现instanceof</title>
+</head>
+<body>true
+  <script>
+    function instanceofTemp(left,right) {
+      while(true) {
+        if(left === null) {
+          return false
+        }
+        if(left.__proto__ === right.prototype) {
+          return true
+        }
+        left = left.__proto__
+      }
+    }
+  </script>
+</body>
+</html>

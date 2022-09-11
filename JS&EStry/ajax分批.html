@@ -1,0 +1,30 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+    <meta charset="UTF-8">
+    <meta http-equiv="X-UA-Compatible" content="IE=edge">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Document</title>
+</head>
+
+<body>
+    <script>
+        function createdRequest(task, pool) {
+            pool = pool || 3
+            let result = [],
+                together = new Array(pool).fill(null),
+                index = 0
+            console.log(together)
+            index++
+
+        }
+        createdRequest(0, 2).then(result => {
+            console.log('成功：', result)
+        }).catch(reason => {
+            console.log('失败苏', reason)
+        })
+    </script>
+</body>
+
+</html>

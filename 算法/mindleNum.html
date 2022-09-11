@@ -1,0 +1,38 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <meta http-equiv="X-UA-Compatible" content="ie=edge">
+    <title>Document</title>
+</head>
+
+<body>
+    <script>
+        var findMedianSortedArrays = function(nums1, nums2) {
+            let newList = nums1.concat(nums2)
+            let sortList = newList.sort((a, b) => {
+                return a - b
+            })
+            let length = sortList.length
+            let median = null
+            if (length % 2 === 0) {
+                let index = length / 2
+                median = (newList[index] + newList[index - 1]) / 2
+            } else {
+                console.log(length)
+                let index = Math.floor(length / 2)
+                median = newList[index]
+            }
+
+            console.log(sortList, median)
+            return median
+
+        };
+        findMedianSortedArrays([3], [-1, -2])
+            // findMedianSortedArrays([4, 5, 6, 7, 9], [1, 2, 3, 8])
+    </script>
+</body>
+
+</html>

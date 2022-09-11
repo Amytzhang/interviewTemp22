@@ -1,0 +1,25 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta http-equiv="X-UA-Compatible" content="IE=edge">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Document</title>
+</head>
+<body>
+  <script >
+    /*闭包应用：利用闭包的保存作用，我们可以把一些信息预先存储起来【预处理】
+    供其上下文中后期拿来使用，我们把这种预先存储/预先处理的机制称之为“函数柯里化”*/
+    const fn = function(...params){
+      console.log(params)
+      return function proxy(...arguments) {
+        console.log(arguments)
+        params = params.concat(arguments)
+        return params.reduce((pre,current)=>{return pre+current})
+      }
+    }
+    let res = fn(1,2,3)(4)
+    console.log(res)
+  </script>
+</body>
+</html>

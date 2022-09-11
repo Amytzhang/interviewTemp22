@@ -1,0 +1,42 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <meta http-equiv="X-UA-Compatible" content="ie=edge">
+    <title>Document</title>
+</head>
+
+<body>
+    <script>
+        /*
+              超时
+              */
+        var threeSum = function(nums) {
+            if (nums.length === 0 || nums.length === 1) return []
+            let res = []
+            let length = nums.length;
+            nums.sort((a, b) => a - b) // 先排个队，最左边是最弱（小）的，最右边是最强(大)的
+            if (nums[0] > 0) return []
+            for (let i = 0; i < nums.length - 2; i++) {
+                for (let j = i + 1; j < nums.length - 1; j++) {
+                    for (let z = j + 1; z < nums.length; z++) {
+
+                        if (nums[i] + nums[j] + nums[z] === 0 && !res.includes(JSON.stringify([nums[i], nums[j], nums[z]]))) {
+                            res.push(JSON.stringify([nums[i], nums[j], nums[z]]))
+                        }
+                    }
+                }
+            }
+            res = res.map(item => {
+                return JSON.parse(item)
+            })
+            console.log('res2', res)
+            return res
+        }
+        threeSum()
+    </script>
+</body>
+
+</html>

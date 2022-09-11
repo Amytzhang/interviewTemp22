@@ -1,0 +1,54 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <meta http-equiv="X-UA-Compatible" content="ie=edge">
+    <title>归并排序</title>
+</head>
+
+<body>
+    <script>
+        var i = 0;
+        function mergeSort(arr) {
+            let length = arr.length;
+            if (length < 2) {
+                return arr
+            }
+            var middle = Math.floor(length / 2);
+            let left = arr.slice(0, middle);
+            let right = arr.slice(middle)
+            console.log('left:', left)
+            console.log('right:', right)
+            return merge(mergeSort(left), mergeSort(right))
+        }
+
+        function merge(left, right) {
+
+            console.time(`归并排序耗时：`)
+            console.log(`归并排序耗时${i++}：`)
+            var result = [];
+            while (left.length && right.length) {
+                if (left[0] <= right[0]) {
+                    result.push(left.shift())
+                } else {
+                    result.push(right.shift())
+                }
+            }
+            while (left.length) {
+                result.push(left.shift())
+            }
+            while (right.length) {
+                result.push(right.shift())
+            }
+            console.log(`归并排序耗时${i++}：`, result)
+            console.timeEnd('结束')
+            return result
+        }
+        let arr = [3, 44, 38, 5, 47, 15, 36, 26, 27, 2, 46, 4, 19, 50, 48]
+        console.log(mergeSort(arr))
+    </script>
+</body>
+
+</html>

@@ -1,0 +1,48 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <meta http-equiv="X-UA-Compatible" content="ie=edge">
+    <title>回溯</title>
+</head>
+
+<body>
+    <script>
+        var permute = function(nums) {
+            let result = [];
+            let str = nums.length;
+            if (nums.length == 1) {
+                return result.push(nums);
+            }
+            const defs = (item, curr, i, lists) => {
+                console.log(nums.length)
+                if (i == nums.length - 1) {
+                    result.push(curr)
+                    return
+                }
+                for (const list in lists) {
+                    console.log('list', list)
+                    console.log('---', item, curr, i, lists)
+                    defs(item, curr.push(lists[list]), i + 1)
+                }
+
+            }
+            for (let i = 0; i < str; i++) {
+                let before = nums.join('').slice(0, i)
+                let after = nums.join('').slice(i + 1, str)
+                const lists = before ? (before + after).split('') : after.split('');
+                const now = nums[i]
+                console.log('now:', now, lists)
+                defs(now, [now], 0, lists)
+            }
+
+            return result
+        };
+        let test = permute([1, 2, 3])
+        console.log(test)
+    </script>
+</body>
+
+</html>

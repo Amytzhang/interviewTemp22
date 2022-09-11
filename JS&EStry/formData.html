@@ -1,0 +1,33 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta http-equiv="X-UA-Compatible" content="IE=edge">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Document</title>
+</head>
+<body>
+  <form id="fm">
+    <input type="text" name="user" id="user"><br>
+    <input type="password" name="pwd" id="pwd"><br>
+    <input type="radio" name="sex" value="男" checked>男
+    <input type="radio" name="sex" value="女">女<br>
+    <input type="file" name="pic"><br/>
+    <input type="button" id="btn" value="提交">
+ </form>
+ <script >
+    document.getElementById('btn').onclick = function () {
+       // 使用FormData步骤1：找到表单DOM对象
+       
+       // 使用FormData步骤2：创建FormData对象，并传递表单
+       var fd = new FormData();
+       // 2. 调用fd对象的append方法，向fd对象中，追加数据即可
+       // fd.append('key', 'value');
+       fd.append('username', document.getElementById('user').value);
+       fd.append('pwd', document.getElementById('pwd').value);
+      
+       console.log(fd.getAll('username'))
+    }
+ </script>
+</body>
+</html>

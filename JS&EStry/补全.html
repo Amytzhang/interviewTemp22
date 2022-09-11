@@ -1,0 +1,45 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <meta http-equiv="X-UA-Compatible" content="ie=edge">
+    <title>Document</title>
+</head>
+
+<body>
+    <script>
+        class Stack {
+            constructor(props) {
+                this.list = []
+            }
+            in (value) {
+                this.list.push(value)
+            }
+            out() {
+                return this.list.pop()
+            }
+            top() {
+                let index = this.list.length
+                return this.list[index - 1]
+            }
+            size() {
+                return this.list.length
+            }
+        }
+        const stack = new Stack()
+        stack.in('x')
+        stack.in('y')
+        stack.in('z')
+
+        console.log(stack.top()) //z
+        console.log(stack.size()) // 3
+
+        console.log(stack.out()) // z
+        console.log(stack.top()) // y
+        console.log(stack.size()) // 2
+    </script>
+</body>
+
+</html>

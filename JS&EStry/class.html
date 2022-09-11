@@ -1,0 +1,30 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <meta http-equiv="X-UA-Compatible" content="ie=edge">
+    <title>Document</title>
+</head>
+
+<body>
+    <script>
+        class ponit1 {
+            constructor() {
+                // 在new的时候会被继承
+                this.x1 = 3
+            }
+            show() {
+                console.log(this.x1)
+                let b = 0;
+                console.log(b)
+            }
+        }
+        let point2 = new ponit1()
+        point2.show()
+        console.log(point2.x1)
+    </script>
+</body>
+
+</html>

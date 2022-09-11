@@ -1,0 +1,39 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta http-equiv="X-UA-Compatible" content="IE=edge">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Document</title>
+</head>
+<body>
+  <script>
+    function bubbleSort(arr) {
+
+var len = arr.length
+
+for (var i = 0; i < len - 1; i++) {
+
+    for (var j = 0; j < len - 1 - i; j++) {
+        // console.log(j,len-1-i)
+        if (arr[j] > arr[j+1]) {       // 相邻元素两两对比
+
+            var temp = arr[j+1]    // 元素交换
+
+            arr[j+1] = arr[j]
+
+            arr[j] = temp
+
+        }
+        console.log('[2,34,56,78,89,3,2,345,56,2]',arr[j],arr)
+    }
+
+}
+
+return arr
+
+}
+console.log(this.bubbleSort([2,34,56,78,89,3,2,345,56,2]))
+  </script>
+</body>
+</html>

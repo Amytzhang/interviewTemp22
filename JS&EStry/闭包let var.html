@@ -1,0 +1,71 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Document</title>
+    <style>
+        html,
+        body {
+            margin: 0;
+            padding: 0;
+            width: 100%;
+            height: 100%;
+        }
+    </style>
+</head>
+
+<body>
+    <button index="0">red</button>
+    <button index='1'>blue</button>
+    <button index='2'>pink</button>
+    <button index='3'>green</button>
+    <script>
+        var list = document.getElementsByTagName('button')
+        var clors = ['red', 'blue', 'pink', 'green']
+            // for(var i = 0; i< list.length; i++) {
+            // list[i].onclick = (function(i) {
+            //    return function() {
+            //     var clor = clors[i]
+            //     console.log(i)
+            //     document.body.style.backgroundColor = clor
+            //    }
+            //   })(i)
+            // (function(i) {
+            //   list[i].onclick = function() {
+            //     var clor = clors[i]
+            //     console.log(i)
+            //     document.body.style.backgroundColor = clor
+            //   }
+            // })(i)
+
+        // }
+
+
+
+        // let i=0;搞定 原理同上但是是浏览器底层c++搞，性能比闭包产生的块级作用域块一些，但也占内存
+        // for(let i=0; i< list.length; i++) {
+        //   list[i].onclick = function() {
+        //     var clor = clors[i]
+        //     console.log(i)
+        //     document.body.style.backgroundColor = clor
+        //   }
+        // }
+
+
+        //  事件委托
+        document.body.onclick = function(event) {
+            let target = event.target
+            let targetTag = target.tagName
+            if (targetTag === 'BUTTON') {
+                console.log(1)
+                var index = target.getAttribute('index')
+                console.log(index)
+                document.body.style.backgroundColor = clors[index]
+            }
+        }
+    </script>
+</body>
+
+</html>

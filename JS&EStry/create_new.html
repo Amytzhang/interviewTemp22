@@ -1,0 +1,38 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <meta http-equiv="X-UA-Compatible" content="ie=edge">
+    <title>Document</title>
+</head>
+
+<body>
+    <script>
+        function createNew(fn, ...args) {
+            // let obj = Object.create(fn.prototype)
+            // let res = fn.call(obj, ...args);
+            // 1. 创建一个新的对象
+            let obj = new Object()
+                // 2. 将创建的对象的 __proto__ 指向 构造函数的 prototype
+            obj.__proto__ = fn.prototype
+                // 3. 执行构造函数并将 this 执行新创建的对象
+            let res = fn.call(obj, ...args)
+            if (res && (typeof res === "object" || typeof res == "function")) {
+                return res
+            } else {
+                return obj
+            }
+        }
+
+        function person(name, age) {
+            this.name = name
+            this.age = age
+        }
+        let p1 = new createNew(person, 'wwww', 12)
+        console.log(p1.name)
+    </script>
+</body>
+
+</html>
