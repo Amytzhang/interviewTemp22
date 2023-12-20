@@ -6,6 +6,7 @@ function debounce(fn,delay = 300){
     const args = arguments
     if(timer) {
       clearTimeout(timer)
+      timer=null
     }
     timer = setTimeout(()=>{
       fn.call(this,args)
@@ -13,7 +14,7 @@ function debounce(fn,delay = 300){
   }
 }
 
-//节流 如果短时间内多次触发，以一个固定的频率执行
+//节流 一个时间内只执行一次
 function throttle(fn,delay=1000){
   let lastTime=0;
   return (...args)=>{

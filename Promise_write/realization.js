@@ -69,7 +69,7 @@
         self.onfulfilledCallback = [];
         self.onrejectedCallback = []
             //修改实例状态
-        var change = function change(state, result) {
+            function change (state, result) {
             //状态更改一次不再更改
             if (self.state !== 'pending') return;
             self.state = state

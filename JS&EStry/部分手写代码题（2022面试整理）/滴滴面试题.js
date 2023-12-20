@@ -16,7 +16,7 @@ function test() {
     console.log('end')
 }
 test()
-
+//有多少种排列方法
 const permute = (nums) => {
     const res = [];
     const used = {};

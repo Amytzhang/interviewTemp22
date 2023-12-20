@@ -1,0 +1,42 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta http-equiv="X-UA-Compatible" content="IE=edge">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Document</title>
+  <style>
+    div{font-size: 12px;}
+    svg{width: 100px;height: 100px;background-color: chocolate;}
+    svg text {font-size: 8px;}
+  </style>
+</head>
+<body>
+  <div>我是最小12px字体大小 hello world！</div>
+  <svg>
+    <!-- svg是矢量图的概念方法，这里的文本并不支持换行显示，即使你设置的svg的宽高足够大 -->
+    <!-- text文本设置样式的方法和普通标签设置的方法不一样，例如文本颜色填充是用fill设置，并不是color -->
+    <text x="0" y="8" >我是10px字体大小 hello world！</text>>
+  </svg>
+  <!--  
+2、使用transform来解决
+        如：transform：scale(0.8333)
+        这样确实能在一定程度上实现需求，但是除了在缩小字体外，也缩小了盒子的大小，如上图效果。所以这样就与背景色的需求冲突了，导致设置的背景色块也缩放了。
+ 3、使用rem的方式
+        如：设置 html{font-size:100px} span {font-size:0.1rem}
+        理论上是能够解决问题的，但是与我当前需求不匹配。第一，本项目pc端移动端均包含，所以rem可能存在兼容性问题。第二，当前项目实现方式，不好修改为rem的方式，需要改动内容较多。
+4、使用zoom的方式
+        如：td{font-size:12px;zoom:0.83}
+        完美实现需求，且没有transform的问题，不会导致盒子缩放。且PC项目环境使用谷歌浏览器，可以支持zoom属性，移动端经测试也兼容。
+
+三、区别先总结的差异：
+1.浏览器兼容性。IE全族/Chrome/Safari和IE9+现代浏览器的差别。
+2.控制缩放的值不一样。zoom更全面，但是不能是负数，只能等比例控制；而scale虽然只能是数值，但是能负数，可以只控制1个维度。
+然而，更深层次的差异才是更重要的。
+1. zoom的缩放是相对于左上角的；而scale默认是居中缩放；
+2. zoom的缩放改变了元素占据的空间大小；而scale的缩放占据的原始尺寸不变，页面布局不会发生变化；
+3.zoom和scale对元素的渲染计算方法可能有差异。
+
+-->
+</body>
+</html>

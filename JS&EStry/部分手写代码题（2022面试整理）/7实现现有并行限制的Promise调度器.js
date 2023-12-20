@@ -24,17 +24,17 @@ class Scheduler {
     }
     taskStart() {
         for (let i = 0; i < this.maxCount; i++) {
-            this.requset()
+            this.request()
         }
     }
-    requset() {
+    request() {
         if (!this.queue || !this.queue.length || this.runCount >= this.maxCount) {
             return;
         }
         this.runCount++;
         this.queue.shift()().then(() => {
             this.runCount--;
-            this.requset()
+            this.request()
         })
     }
 }
