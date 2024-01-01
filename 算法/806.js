@@ -5,10 +5,10 @@
 var lemonadeChange = function(bills) {
   let five=0;let ten=0;
   for(let i=0; i<bills.length;i++){
-      let remiander=bills[i]-5
-      if(remiander==0){
+      let remainder=bills[i]-5
+      if(remainder==0){
           five++
-      } else if(remiander-5==5) {
+      } else if(remainder==5) {
           if(five>0){
               five--
               ten++
