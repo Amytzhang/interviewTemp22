@@ -1,0 +1,49 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Document</title>
+  <style>
+    html,body{
+      width: 100%;
+      height: 100%;
+      margin: 0;
+      padding: 0;
+      color: white;
+      
+    }
+
+  </style>
+
+</head>
+<body>
+
+  <script type="module">
+    import renderer from './componentRender.js'
+    const MyComponent=function(){
+      return{
+        tag:'div',
+        props:{
+          onClick:()=>{
+            alert('this component render')
+          }
+        },
+        children:'component',
+        styles:{
+          width:'200px',
+          height:'50px',
+          'background-color': 'red',
+          'line-height': '50px',
+          'padding-left':'40px'
+        }
+      }
+    }
+    const vnode = {
+      tag:MyComponent
+    }
+    //渲染器的工作原理：本质DOM操作api完成渲染工作
+    renderer(vnode,document.body)
+  </script>
+</body>
+</html>
