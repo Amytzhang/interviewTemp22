@@ -27,25 +27,25 @@
   const particles = [];
 
   function Particle(x, y, speedX, speedY, radius, color) {
-this.x = x;
-this.y = y;
-this.speedX = speedX;
-this.speedY = speedY;
-this.radius = radius;
-this.color = color;
-}
+    this.x = x;
+    this.y = y;
+    this.speedX = speedX;
+    this.speedY = speedY;
+    this.radius = radius;
+    this.color = color;
+  }
 
-Particle.prototype.update = function() {
-this.x += this.speedX;
-this.y += this.speedY;
+  Particle.prototype.update = function() {
+  this.x += this.speedX;
+  this.y += this.speedY;
 
-if (this.x + this.radius < 0 || this.x - this.radius > canvas.width) {
-  this.speedX = -this.speedX;
-}
+  if (this.x + this.radius < 0 || this.x - this.radius > canvas.width) {
+    this.speedX = -this.speedX;
+  }
 
-if (this.y + this.radius < 0 || this.y - this.radius > canvas.height) {
-  this.speedY = -this.speedY;
-}
+  if (this.y + this.radius < 0 || this.y - this.radius > canvas.height) {
+    this.speedY = -this.speedY;
+  }
 };
 
 Particle.prototype.draw = function() {
