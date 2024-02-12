@@ -21,6 +21,26 @@
 
   <script type="module">
     import renderer from './componentRender.js'
+    /**
+     * vue.js中有状态组件就是使用对象结构来表达的
+     * 更改renderer：
+     * 1. vnode.tag判断类型 function改为object
+     * 2. mountComponent对象调用方法 vnode.tag.render()
+     */
+    const MyClassComponent = {
+      render() {
+        return{
+          tag:'div',
+          props:{
+            onClick:()=>{
+              alert('this component render')
+            }
+          },
+          children:'component',
+        }
+      },
+    }
+    //function来表示组件
     const MyComponent=function(){
       return{
         tag:'div',

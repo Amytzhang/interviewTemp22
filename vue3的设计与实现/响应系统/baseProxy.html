@@ -1,0 +1,58 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>响应式数据的基本实现</title>
+  <style>
+    html,body{
+      width: 100%;
+      height: 100%;
+      margin: 0;
+      padding: 0;
+      text-align: center;
+
+    }
+  </style>
+</head>
+<body>
+  <div>简易版本响应式数据的基本实现</div>
+  <div id="text">
+
+  </div>
+  <script type="module">
+    //存储副作用函数的桶
+    const bucket = new Set();
+    //原始数据
+    const data = { text: "hello word" };
+    //对原始数据的代理
+    const obj = new Proxy(data, {
+      //读操作
+      get(target, key) {
+        //将副作用函数effect添加到存储副作用函数的桶中
+        bucket.add(effect);
+        //返回属性值
+        return target[key];
+      },
+      //拦截设置操作
+      set(target, key, newVal) {
+        //设置属性
+        target[key] = newVal;
+        //将副作用函数从桶中取出并执行
+        bucket.forEach((fn) => fn());
+        return true;
+      }
+    });
+    //副作用函数
+    function effect(){
+      document.getElementById('text').innerText=obj.text
+    }
+    //调用
+    effect()
+    //更改
+    setTimeout(()=>{
+      obj.text='hello sssss'
+    },1000)
+  </script>
+</body>
+</html>
