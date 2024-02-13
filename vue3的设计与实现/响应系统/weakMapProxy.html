@@ -1,0 +1,93 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>每个属性与副作用函数建立明确的联系</title>
+  <style>
+    html,body{
+      width: 100%;
+      height: 100%;
+      margin: 0;
+      padding: 0;
+      text-align: center;
+
+    }
+  </style>
+</head>
+<body>
+  <div>每个属性与副作用函数建立明确的联系</div>
+  <div>
+    解决optimizeProxy中的问题
+  </div>
+  <div id="text">
+
+  </div>
+  <script type="module">
+    //声明一个全局变量用来存储被注册的副作用函数
+    let activeEffect
+    //存储副作用函数的桶
+    const bucket = new WeakMap();
+    //原始数据
+    const data = { text: "hello word" };
+    //对原始数据的代理
+    const obj = new Proxy(data, {
+      //读操作
+      get(target, key) {
+        //没有副作用函数直接return
+        if(!activeEffect)return target[key]
+        //根据target从桶中取得depsMap,它也是一个Map类型
+        let depsMap= bucket.get(target)
+        //如果depsMap不存在，需要新建一个Map与target关联
+        if(!depsMap){
+          depsMap = new Map();
+          bucket.set(target,depsMap)
+        }
+        //根据key从depsMap中取得deps,它是一个set类型
+        //里面存储着所有与当前的key相关联的副作用函数：effects
+        let deps= depsMap.get(key)
+        //如果deps不存在，新建一个set并关联key
+        if(!deps) {
+          depsMap.set(key,(deps=new Set()))
+        }
+        //将激活的activeEffect添加到桶里
+        deps.add(activeEffect)
+        //返回属性值
+        return target[key];
+      },
+      //拦截设置操作
+      set(target, key, newVal) {
+        //设置属性
+        target[key] = newVal;
+        //根据target从桶中取得depsMap,它是key-->effects
+        const depsMap=bucket.get(target)
+        if(!depsMap) return;
+
+        //根据key取得所有副作用函数
+        const effects = depsMap.get(key)
+        effects&&effects.forEach(fn => {
+        fn();
+      });
+      }
+    });
+    //副作用函数
+    //todo 如果函数是匿名函数的时候
+    function effect(fn){
+      //调用effect注册副作用函数时，将副作用函数fn赋值给activeEffect
+      activeEffect = fn
+      //执行副作用函数
+      fn()
+    }
+    //调用
+    effect(()=>{
+      console.log('2222222')
+      obj.text
+      //document.getElementById('text').innerText=obj.text
+    })
+    //更改
+    setTimeout(()=>{
+      obj.text='hello sssss'
+    },1000)
+  </script>
+</body>
+</html>

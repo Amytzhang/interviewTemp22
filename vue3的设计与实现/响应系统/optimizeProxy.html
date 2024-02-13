@@ -17,6 +17,9 @@
 </head>
 <body>
   <div>优化版本：响应式数据的基本实现</div>
+  <div>
+    没有在副作用函数与被操作的目标字段之间建立明确的联系
+  </div>
   <div id="text">
 
   </div>
@@ -62,7 +65,9 @@
     })
     //更改
     setTimeout(()=>{
-      obj.text='hello sssss'
+      //按理说effect不应该再被调用一次因为这个属性跟effect无关
+      //触发的原因：没有在副作用函数与被操作的目标字段之间建立明确的联系
+      obj.notExit='hello sssss'
     },1000)
   </script>
 </body>
