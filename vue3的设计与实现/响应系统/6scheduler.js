@@ -50,6 +50,7 @@ function track(target, key) {
    * deps就是一个与当前副作用函数存在联系的依赖集合
    * 将其添加到activeEffect.deps数组中
    **/
+
   activeEffect.deps.push(deps);
 }
 function trigger(target, key) {
