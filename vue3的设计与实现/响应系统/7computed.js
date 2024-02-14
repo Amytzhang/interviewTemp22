@@ -1,14 +1,16 @@
 /**
- * 调度器实现
+ * 4.8计算属性与lazy
+ *
  */
 //存储副作用函数的桶
 const bucket = new WeakMap();
-
+//声明一个全局变量用来存储被注册的副作用函数
 let activeEffect;
+//effect栈
 let effectStack = [];
 
 //原始数据
-const data = { foo: 1, text: "hello word", flag: "false" };
+const data = { foo: 1, bar: 2, text: "hello word", flag: "false" };
 //对原始数据的代理
 const obj = new Proxy(data, {
   //读操作
@@ -94,24 +96,40 @@ function effect(fn, options = {}) {
     cleanup(effectFn);
     activeEffect = effectFn;
     effectStack.push(fn);
-    fn();
+    //todo 将fn执行的结果存储到res中
+    const res = fn();
     effectStack.pop();
     activeEffect = effectStack[effectStack.length - 1];
+    //将res作为effectFn的返回值
+    return res;
   };
   effectFn.options = options;
   effectFn.deps = [];
-  effectFn();
-}
-effect(
-  () => {
-    console.log(obj.foo);
-  },
-  {
-    scheduler(fn) {
-      setTimeout(fn);
-    }
+  //todo 只有lazy为false，才执行
+  if (!options.lazy) {
+    effectFn();
   }
-);
+  //todo 将副作用函数作为返回值返回
+  return effectFn;
+}
 
-obj.foo++;
-console.log("结束");
+function computed(getter) {
+  //把getter作为副作用函数，创建一个lazy的effect
+  const effectFn = effect(getter, {
+    lazy: false
+  });
+  const obj = {
+    get value() {
+      return effectFn();
+    }
+  };
+  return obj;
+}
+const sumRes = computed(() => {
+  console.log("computed:");
+  return obj.foo + obj.bar;
+});
+console.log("sumRes:", sumRes.value);
+
+console.log("sumRes:", sumRes.value);
+console.log("sumRes:", sumRes.value);
