@@ -1,6 +1,5 @@
 /**
- * 4.8计算属性与lazy
- *
+ * watch的实现本质就是利用effect以及options.scheduler选项
  */
 //存储副作用函数的桶
 const bucket = new WeakMap();
@@ -10,7 +9,7 @@ let activeEffect;
 let effectStack = [];
 
 //原始数据
-const data = { foo: 1, bar: 2, text: "hello word", flag: "false" };
+const data = { foo: 1 };
 //对原始数据的代理
 const obj = new Proxy(data, {
   //读操作
@@ -51,6 +50,7 @@ function track(target, key) {
    * deps就是一个与当前副作用函数存在联系的依赖集合
    * 将其添加到activeEffect.deps数组中
    **/
+
   activeEffect.deps.push(deps);
 }
 function trigger(target, key) {
@@ -90,7 +90,6 @@ function cleanup(effectFn) {
   //重制effectFn.deps数组
   effectFn.deps.length = 0;
 }
-
 //副作用函数
 function effect(fn, options = {}) {
   const effectFn = () => {
@@ -114,43 +113,51 @@ function effect(fn, options = {}) {
   return effectFn;
 }
 
-function computed(getter) {
-  //value用来缓存上次计算的值
-  let value;
-  // dirty标志，用来标识是否需要重新计算值，为true则意味着脏，需要计算
-  let dirty = true;
-  //把getter作为副作用函数，创建一个lazy的effect
-  const effectFn = effect(getter, {
+//watch函数接收两个参数，source是响应式数据，cb是回调函数
+function watch(source, cb) {
+  //定义getterFn
+  let getterFn;
+  if (typeof source === "function") {
+    getterFn = source;
+  } else {
+    getterFn = () => traverse(source);
+  }
+  //通过lazy获取旧值
+  let oldValue, newValue;
+  //调用traverse递归地读取
+  const effectFn2 = effect(() => getterFn(), {
     lazy: true,
     scheduler() {
-      if (!dirty) {
-        dirty = true;
-        //当计算属性依赖的响应式数据变化时，手动调用trigger函数触发响应
-        trigger(objFn, "value");
-      }
+      //在schedule中执行effectFn得到的是新值
+      newValue = effectFn2();
+      //数据变化时调用回调函数cb
+      cb(newValue, oldValue);
+      //更新旧值
+      oldValue = newValue;
     }
   });
-  const objFn = {
-    get value() {
-      // 只有脏时才计算值，并将得到的值缓存到value中
-      if (dirty) {
-        value = effectFn();
-        //将dirty设置为false，下一次访问直接使用缓存到value中的值
-        dirty = false;
-      }
-      //当读取value时，手动调用track函数进行追踪
-      track(objFn, "value");
-      return value;
-    }
-  };
-  return objFn;
+  //手动调用副作用函数，拿到的就是旧值
+  oldValue = effectFn2();
 }
+function traverse(value, seen = new Set()) {
+  //如果读取的数据是原始值，或者已经被读取过了，那么什么都不做
+  if (typeof value !== "object" || value === null || seen.has(value)) return;
+  //将数据添加到seen中，代表遍历的读取过了，避免循环引用引起的死循环
+  seen.add(value);
+  //todo 暂时不考虑数组等其他结构
+  for (const k in value) {
+    traverse(value[key], seen);
+  }
+  return value;
+}
+//
+watch(
+  () => obj.foo,
+  (newValue, oldValue) => {
+    console.log("watch-----数据变化:", newValue, oldValue);
+  }
+);
 
-const sumRes = computed(() => {
-  console.log("computed:");
-  return obj.foo + obj.bar;
-});
-effect(function effectFn() {
-  console.log(sumRes.value);
-});
+obj.foo++;
+
 obj.foo++;
