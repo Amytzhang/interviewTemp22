@@ -26,14 +26,20 @@ const p = new Proxy(data, {
   },
   //设置拦截
   set(target, key, newVal, receiver) {
+    const oldValue = target[key];
     //todo 如果属性不存在，则说明是在添加新属性，否则是设置已有的属性
     const type = Object.prototype.hasOwnProperty.call(target, key)
       ? "SET"
       : "ADD";
     //todo 设置属性
     const res = Reflect.set(target, key, newVal, receiver);
-    //todo 将type作为第三个参数
-    trigger(target, key, type);
+    console.log("进入判断", oldValue, newVal);
+    //todo 合理的触发响应 排除都是NaN
+    if (oldValue !== newVal && (oldValue === oldValue || newVal === newVal)) {
+      //todo 将type作为第三个参数
+      trigger(target, key, type);
+    }
+
     return res;
   },
   //todo 通过has拦截函数实现对in操作符的运算
@@ -232,6 +238,6 @@ effect(() => {
   // for (const key in p) {
   //   console.log("--key-in-p-:", key);
   // }
-  console.log(data.foo);
+  console.log(p.foo);
 });
-data.foo = 2;
+p.foo = 1;
