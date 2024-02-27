@@ -16,59 +16,61 @@ const data = { foo: 1 };
  *
  */
 const ITERATE_KEY = Symbol();
-const p = new Proxy(data, {
-  //读操作
-  get(target, key, receiver) {
-    //建立联系
-    track(target, key);
-    //返回属性值
-    return Reflect.get(target, key, receiver);
-  },
-  //设置拦截
-  set(target, key, newVal, receiver) {
-    const oldValue = target[key];
-    //todo 如果属性不存在，则说明是在添加新属性，否则是设置已有的属性
-    const type = Object.prototype.hasOwnProperty.call(target, key)
-      ? "SET"
-      : "ADD";
-    //todo 设置属性
-    const res = Reflect.set(target, key, newVal, receiver);
-    console.log("进入判断", oldValue, newVal);
-    //todo 合理的触发响应 排除都是NaN
-    if (oldValue !== newVal && (oldValue === oldValue || newVal === newVal)) {
-      //todo 将type作为第三个参数
-      trigger(target, key, type);
-    }
+const p = reactive(data);
+function reactive(data) {
+  return new Proxy(data, {
+    //读操作
+    get(target, key, receiver) {
+      //建立联系
+      track(target, key);
+      //返回属性值
+      return Reflect.get(target, key, receiver);
+    },
+    //设置拦截
+    set(target, key, newVal, receiver) {
+      const oldValue = target[key];
+      //todo 如果属性不存在，则说明是在添加新属性，否则是设置已有的属性
+      const type = Object.prototype.hasOwnProperty.call(target, key)
+        ? "SET"
+        : "ADD";
+      console.log("set: type--", type);
+      //todo 设置属性
+      const res = Reflect.set(target, key, newVal, receiver);
+      //todo 合理的触发响应 排除都是NaN
+      if (oldValue !== newVal && (oldValue === oldValue || newVal === newVal)) {
+        //todo 将type作为第三个参数
+        trigger(target, key, type);
+      }
 
-    return res;
-  },
-  //todo 通过has拦截函数实现对in操作符的运算
-  has(target, key) {
-    track(target, key);
-    console.log("has");
-    return Reflect.has(target, key);
-  },
-  //todo 重写ownKeys拦截for...in
-  ownKeys(target) {
-    //将副作用函数与ITERATE_KEY关联
-    console.log("ownkeys:", target);
-    track(target, ITERATE_KEY);
-    return Reflect.ownKeys(target);
-  },
-  //todo 重写 delete
-  deleteProperty(target, key) {
-    console.log("deleteProperty", target, key);
-    //检查属性是否属于target
-    let hadKey = Object.prototype.hasOwnProperty.call(target, key);
-    //使用Reflect.deletePrototype删除
-    const res = Reflect.deleteProperty(target, key);
-    if (hadKey && res) {
-      trigger(target, key, "DELETE");
+      return res;
+    },
+    //todo 通过has拦截函数实现对in操作符的运算
+    has(target, key) {
+      track(target, key);
+      console.log("has");
+      return Reflect.has(target, key);
+    },
+    //todo 重写ownKeys拦截for...in
+    ownKeys(target) {
+      //将副作用函数与ITERATE_KEY关联
+      console.log("ownkeys:", target);
+      track(target, ITERATE_KEY);
+      return Reflect.ownKeys(target);
+    },
+    //todo 重写 delete
+    deleteProperty(target, key) {
+      console.log("deleteProperty", target, key);
+      //检查属性是否属于target
+      let hadKey = Object.prototype.hasOwnProperty.call(target, key);
+      //使用Reflect.deletePrototype删除
+      const res = Reflect.deleteProperty(target, key);
+      if (hadKey && res) {
+        trigger(target, key, "DELETE");
+      }
+      return res;
     }
-    return res;
-  }
-});
-
+  });
+}
 //在get拦截函数内调用track函数追踪变化
 function track(target, key) {
   //没有副作用函数直接return
@@ -233,11 +235,21 @@ function traverse(value, seen = new Set()) {
   return value;
 }
 
+// effect(() => {
+//   //"foo" in p;//触发has
+//   // for (const key in p) {
+//   //   console.log("--key-in-p-:", key);
+//   // }
+//   console.log(p.foo);
+// });
+// p.foo = 1;
+
+const obj = {};
+const proto = { bar: 1 };
+const child = reactive(obj);
+Object.setPrototypeOf(child, proto);
+
 effect(() => {
-  //"foo" in p;//触发has
-  // for (const key in p) {
-  //   console.log("--key-in-p-:", key);
-  // }
-  console.log(p.foo);
+  console.log(child.bar);
 });
-p.foo = 1;
+child.bar = 2;
