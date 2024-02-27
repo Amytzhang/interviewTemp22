@@ -17,14 +17,36 @@ const data = { foo: 1 };
  */
 const ITERATE_KEY = Symbol();
 const p = reactive(data);
-function reactive(data) {
+function reactive(obj) {
+  return createReactive(obj);
+}
+function shallowReactive(obj) {
+  return createReactive(obj, true);
+}
+function createReactive(data, isShallow = false) {
   return new Proxy(data, {
     //读操作
     get(target, key, receiver) {
+      //todo 代理对象可以通过raw属性访问原始数据，解决child新加bar时出发effect的get和set
+      if (key === "raw") {
+        return target;
+      }
+      //todo 对于obj.foo.bar这类深响应做处理，不做处理的话修改obj.foo.bar不会触发副作用函数
+      let res = Reflect.get(target, key, receiver);
       //建立联系
       track(target, key);
+      console.log("get:", target, key);
+
+      //todo 浅响应obj.foo可以响应 obj.foo.bar不响应
+      if (isShallow) {
+        return res;
+      }
+      if (typeof res === "object" && res !== null) {
+        //todo 调用reactive将结果包装成响应式数据返回
+        return reactive(res);
+      }
       //返回属性值
-      return Reflect.get(target, key, receiver);
+      return res;
     },
     //设置拦截
     set(target, key, newVal, receiver) {
@@ -33,13 +55,19 @@ function reactive(data) {
       const type = Object.prototype.hasOwnProperty.call(target, key)
         ? "SET"
         : "ADD";
-      console.log("set: type--", type);
+
       //todo 设置属性
       const res = Reflect.set(target, key, newVal, receiver);
-      //todo 合理的触发响应 排除都是NaN
-      if (oldValue !== newVal && (oldValue === oldValue || newVal === newVal)) {
-        //todo 将type作为第三个参数
-        trigger(target, key, type);
+      if (target === receiver.raw) {
+        console.log("set");
+        //todo 合理的触发响应 排除都是NaN
+        if (
+          oldValue !== newVal &&
+          (oldValue === oldValue || newVal === newVal)
+        ) {
+          //todo 将type作为第三个参数
+          trigger(target, key, type);
+        }
       }
 
       return res;
@@ -234,7 +262,7 @@ function traverse(value, seen = new Set()) {
   }
   return value;
 }
-
+//-------合理的触发响应---------
 // effect(() => {
 //   //"foo" in p;//触发has
 //   // for (const key in p) {
@@ -244,12 +272,20 @@ function traverse(value, seen = new Set()) {
 // });
 // p.foo = 1;
 
-const obj = {};
-const proto = { bar: 1 };
-const child = reactive(obj);
-Object.setPrototypeOf(child, proto);
+// const obj = {};
+// const proto = { foo: { bar: 1 } };
+// const child = reactive(obj);
+// Object.setPrototypeOf(child, proto);
 
+// effect(() => {
+//   console.log(child.foo.bar);
+// });
+// child.foo.bar = 2;
+
+//-----浅响应与深响应-----
+let list = { foo: { one: 1 } };
+const depReflect = reactive(list);
 effect(() => {
-  console.log(child.bar);
+  console.log(depReflect.foo.one);
 });
-child.bar = 2;
+depReflect.foo.one = 2;
