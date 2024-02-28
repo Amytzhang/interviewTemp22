@@ -17,13 +17,17 @@ const data = { foo: 1 };
  */
 const ITERATE_KEY = Symbol();
 const p = reactive(data);
+
 function reactive(obj) {
   return createReactive(obj);
 }
 function shallowReactive(obj) {
   return createReactive(obj, true);
 }
-function createReactive(data, isShallow = false) {
+function readonly(obj) {
+  return createReactive(obj, false, true);
+}
+function createReactive(data, isShallow = false, isReadonly = false) {
   return new Proxy(data, {
     //读操作
     get(target, key, receiver) {
@@ -31,10 +35,13 @@ function createReactive(data, isShallow = false) {
       if (key === "raw") {
         return target;
       }
+      if (!isReadonly) {
+        //建立联系
+        track(target, key);
+      }
       //todo 对于obj.foo.bar这类深响应做处理，不做处理的话修改obj.foo.bar不会触发副作用函数
       let res = Reflect.get(target, key, receiver);
-      //建立联系
-      track(target, key);
+
       console.log("get:", target, key);
 
       //todo 浅响应obj.foo可以响应 obj.foo.bar不响应
@@ -43,13 +50,17 @@ function createReactive(data, isShallow = false) {
       }
       if (typeof res === "object" && res !== null) {
         //todo 调用reactive将结果包装成响应式数据返回
-        return reactive(res);
+        return isReadonly ? readonly(res) : reactive(res);
       }
       //返回属性值
       return res;
     },
     //设置拦截
     set(target, key, newVal, receiver) {
+      if (isReadonly) {
+        console.warn(`${key} 属性是只读属性`);
+        return true;
+      }
       const oldValue = target[key];
       //todo 如果属性不存在，则说明是在添加新属性，否则是设置已有的属性
       const type = Object.prototype.hasOwnProperty.call(target, key)
@@ -87,6 +98,10 @@ function createReactive(data, isShallow = false) {
     },
     //todo 重写 delete
     deleteProperty(target, key) {
+      if (isReadonly) {
+        console.warn(`${key} 属性是只读属性`);
+        return true;
+      }
       console.log("deleteProperty", target, key);
       //检查属性是否属于target
       let hadKey = Object.prototype.hasOwnProperty.call(target, key);
@@ -283,9 +298,25 @@ function traverse(value, seen = new Set()) {
 // child.foo.bar = 2;
 
 //-----浅响应与深响应-----
-let list = { foo: { one: 1 } };
-const depReflect = reactive(list);
+// let list = { foo: { one: 1 } };
+// const depReflect = reactive(list);
+// effect(() => {
+//   console.log(depReflect.foo.one);
+// });
+// depReflect.foo.one = 2;
+// const shallow = shallowReactive({ shall: { shallContent: 3 } });
+// effect(() => {
+//   console.log(shallow.shall.shallContent);
+// });
+// shallow.shall.shallContent = 4;
+
+/**-------readonly    (shallow readonly)---------
+ * 只读：只能读取不能修改、删除，只读取没必要建立响应联系
+ * 所以需要修改proxy: get、set、deletePrototype
+ * 实现深只读：还需要在get中递归调用readonly将数据包装成只读代理对象
+ */
+let readItem = readonly({ reader: { content: "222" } });
 effect(() => {
-  console.log(depReflect.foo.one);
+  console.log(readItem.reader.content);
 });
-depReflect.foo.one = 2;
+readItem.reader.content = "0";
