@@ -170,6 +170,7 @@ function trigger(target, key, type, newVal) {
   //todo 设置的目标是数组，并且修改了数组的length属性
   if (Array.isArray(target) && key === "length") {
     depsMap.forEach((effect, key) => {
+      //todo list:[1,2,3] list.length = 1=>[1]
       if (key >= newVal) {
         effect.forEach((effectFn) => {
           if (effectFn !== activeEffect) {
@@ -313,10 +314,10 @@ function traverse(value, seen = new Set()) {
 let list = ["foo", "ww"];
 const depReflect = reactive(list);
 effect(() => {
-  console.log("effect", depReflect.length);
+  console.log("effect", depReflect);
 });
-depReflect[2] = "br";
-depReflect.length = 0;
+depReflect.length = 1;
+console.log(depReflect);
 // const shallow = shallowReactive({ shall: { shallContent: 3 } });
 // effect(() => {
 //   console.log(shallow.shall.shallContent);
