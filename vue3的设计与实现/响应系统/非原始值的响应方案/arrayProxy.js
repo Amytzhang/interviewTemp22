@@ -35,7 +35,7 @@ function createReactive(data, isShallow = false, isReadonly = false) {
       if (key === "raw") {
         return target;
       }
-      if (!isReadonly) {
+      if (!isReadonly && typeof key !== "symbol") {
         //建立联系
         track(target, key);
       }
@@ -93,11 +93,11 @@ function createReactive(data, isShallow = false, isReadonly = false) {
       console.log("has");
       return Reflect.has(target, key);
     },
-    //"" 重写ownKeys拦截for...in
+    //todo 重写ownKeys拦截for...in (array数据也可以使用for in 但使用length属性作为key建立响应)
     ownKeys(target) {
       //将副作用函数与ITERATE_KEY关联
       console.log("ownkeys:", target);
-      track(target, ITERATE_KEY);
+      track(target, Array.isArray(target) ? "length" : ITERATE_KEY);
       return Reflect.ownKeys(target);
     },
     //"" 重写 delete
@@ -167,6 +167,8 @@ function trigger(target, key, type, newVal) {
   const effects = depsMap.get(key);
   //"" 取得与ITERATE_KEY相关联的副作用函数
   const iterateEffects = depsMap.get(ITERATE_KEY);
+  //'' 旧代码在引入cleanup函数后会导致死循环
+  const effectsToRun = new Set(effects);
   //todo 设置的目标是数组，并且修改了数组的length属性
   if (Array.isArray(target) && key === "length") {
     depsMap.forEach((effect, key) => {
@@ -180,8 +182,7 @@ function trigger(target, key, type, newVal) {
       }
     });
   }
-  //'' 旧代码在引入cleanup函数后会导致死循环
-  const effectsToRun = new Set(effects);
+
   effects &&
     effects.forEach((effectFn) => {
       /**'' 4.6避免无限循环
@@ -312,11 +313,28 @@ function traverse(value, seen = new Set()) {
 }
 
 let list = ["foo", "ww"];
+//todo for of可用，重新Symbol.iterator使其与length相关联触发相关副作用函数，在get拦截方法中对Symbol.iterator没必要存到追踪中，所以排除typeof target是symbol的
+list[Symbol.iterator] = function () {
+  const target = this;
+  const len = target.length;
+  let index = 0;
+  return {
+    next() {
+      return {
+        value: index < len ? target[index] : undefined,
+        done: index++ >= len
+      };
+    }
+  };
+};
 const depReflect = reactive(list);
 effect(() => {
-  console.log("effect", depReflect);
+  for (let key of depReflect) {
+    console.log(key);
+  }
+  console.log(depReflect.includes("foo"));
 });
-depReflect.length = 1;
+depReflect[1] = 1;
 console.log(depReflect);
 // const shallow = shallowReactive({ shall: { shallContent: 3 } });
 // effect(() => {
