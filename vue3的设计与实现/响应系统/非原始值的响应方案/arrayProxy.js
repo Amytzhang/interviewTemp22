@@ -36,19 +36,21 @@ function shallowReactive(obj) {
 function readonly(obj) {
   return createReactive(obj, false, true);
 }
-const originMethod = Array.prototype.includes;
 
 //重写数组方法 includes
-const arrayInstrumentations = {
-  includes: function (...args) {
+const arrayInstrumentations = {};
+["includes", "indexOf", "lastIndexOf"].forEach((method) => {
+  const originMethod = Array.prototype[method];
+  arrayInstrumentations[method] = function (...args) {
     //this是代理对象，先在代理对象中查找，将结果存储到res中
     let res = originMethod.apply(this, args);
+    //如果没找到，则通过this.raw拿到原是数组，再从中查找，并更新res
     if (res === false) {
       res = originMethod.apply(this.raw, args);
     }
     return res;
-  }
-};
+  };
+});
 function createReactive(data, isShallow = false, isReadonly = false) {
   return new Proxy(data, {
     //读操作
@@ -364,8 +366,10 @@ let list = ["foo", "ww"];
 // console.log(depReflect);
 
 const obj = {};
-const arr = reactive([obj]);
+const arr = reactive([obj, "1"]);
 
 console.log(arr.includes(arr[0])); //true
-//因为includes内部的this指向的是代理对象arr，并且在获取数组元素时得到的值也是代理对象，需要对includes进行重写
-console.log(arr.includes(obj)); // false
+//false 因为includes内部的this指向的是代理对象arr，并且在获取数组元素时得到的值也是代理对象，需要对includes进行重写
+console.log(arr.includes(obj));
+
+console.log(arr.indexOf("1"));
