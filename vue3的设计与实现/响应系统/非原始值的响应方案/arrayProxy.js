@@ -16,10 +16,19 @@ const data = { foo: 1 };
  *
  */
 const ITERATE_KEY = Symbol();
+//todo解决同一对象多次代理
+const reactiveMap = new Map();
+
 const p = reactive(data);
 
 function reactive(obj) {
-  return createReactive(obj);
+  //优先通过原始对象寻找之前创建的代理对象，没有的话再进行创建
+  const existionProxy = reactiveMap.get(obj);
+  if (existionProxy) return existionProxy;
+
+  const proxy = createReactive(obj);
+  reactiveMap.set(obj, proxy);
+  return proxy;
 }
 function shallowReactive(obj) {
   return createReactive(obj, true);
@@ -314,30 +323,31 @@ function traverse(value, seen = new Set()) {
 
 let list = ["foo", "ww"];
 //todo for of可用，重新Symbol.iterator使其与length相关联触发相关副作用函数，在get拦截方法中对Symbol.iterator没必要存到追踪中，所以排除typeof target是symbol的
-list[Symbol.iterator] = function () {
-  const target = this;
-  const len = target.length;
-  let index = 0;
-  return {
-    next() {
-      return {
-        value: index < len ? target[index] : undefined,
-        done: index++ >= len
-      };
-    }
-  };
-};
-const depReflect = reactive(list);
-effect(() => {
-  for (let key of depReflect) {
-    console.log(key);
-  }
-  console.log(depReflect.includes("foo"));
-});
-depReflect[1] = 1;
-console.log(depReflect);
-// const shallow = shallowReactive({ shall: { shallContent: 3 } });
+// list[Symbol.iterator] = function () {
+//   const target = this;
+//   const len = target.length;
+//   let index = 0;
+//   return {
+//     next() {
+//       return {
+//         value: index < len ? target[index] : undefined,
+//         done: index++ >= len
+//       };
+//     }
+//   };
+// };
+// const depReflect = reactive(list);
 // effect(() => {
-//   console.log(shallow.shall.shallContent);
+//   for (let key of depReflect) {
+//     console.log(key);
+//   }
+//   console.log(depReflect.includes("foo"));
 // });
-// shallow.shall.shallContent = 4;
+// depReflect[1] = 1;
+// console.log(depReflect);
+
+const obj = {};
+const arr = reactive([obj]);
+
+console.log(arr.includes(arr[0])); //true
+console.log(arr.includes(obj)); // false
