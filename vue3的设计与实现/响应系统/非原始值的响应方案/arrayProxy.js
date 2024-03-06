@@ -16,7 +16,7 @@ const data = { foo: 1 };
  *
  */
 const ITERATE_KEY = Symbol();
-//todo解决同一对象多次代理
+//解决同一对象多次代理
 const reactiveMap = new Map();
 
 const p = reactive(data);
@@ -36,6 +36,19 @@ function shallowReactive(obj) {
 function readonly(obj) {
   return createReactive(obj, false, true);
 }
+const originMethod = Array.prototype.includes;
+
+//重写数组方法 includes
+const arrayInstrumentations = {
+  includes: function (...args) {
+    //this是代理对象，先在代理对象中查找，将结果存储到res中
+    let res = originMethod.apply(this, args);
+    if (res === false) {
+      res = originMethod.apply(this.raw, args);
+    }
+    return res;
+  }
+};
 function createReactive(data, isShallow = false, isReadonly = false) {
   return new Proxy(data, {
     //读操作
@@ -43,6 +56,10 @@ function createReactive(data, isShallow = false, isReadonly = false) {
       //"" 代理对象可以通过raw属性访问原始数据，解决child新加bar时出发effect的get和set
       if (key === "raw") {
         return target;
+      }
+      //如果操作对象是数组，并且key存在于arrayInstrumentations中，则返回定义在arrayInstrumentations上的值
+      if (Array.isArray(target) && arrayInstrumentations.hasOwnProperty(key)) {
+        return Reflect.get(arrayInstrumentations, key, receiver);
       }
       if (!isReadonly && typeof key !== "symbol") {
         //建立联系
