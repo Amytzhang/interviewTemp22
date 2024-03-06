@@ -119,7 +119,7 @@ function createReactive(data, isShallow = false, isReadonly = false) {
       console.log("has");
       return Reflect.has(target, key);
     },
-    //todo 重写ownKeys拦截for...in (array数据也可以使用for in 但使用length属性作为key建立响应)
+    //重写ownKeys拦截for...in (array数据也可以使用for in 但使用length属性作为key建立响应)
     ownKeys(target) {
       //将副作用函数与ITERATE_KEY关联
       console.log("ownkeys:", target);
@@ -228,7 +228,7 @@ function trigger(target, key, type, newVal) {
         }
       });
   }
-  //todo 操作类型是数组且类型是ADD，应该取出并执行那些与length属性相关联的副作用函数
+  //操作类型是数组且类型是ADD，应该取出并执行那些与length属性相关联的副作用函数
   if (type === "ADD" && Array.isArray(target)) {
     //根据key取得所有副作用函数
     const lengthEffects = depsMap.get("length");
@@ -339,7 +339,7 @@ function traverse(value, seen = new Set()) {
 }
 
 let list = ["foo", "ww"];
-//todo for of可用，重新Symbol.iterator使其与length相关联触发相关副作用函数，在get拦截方法中对Symbol.iterator没必要存到追踪中，所以排除typeof target是symbol的
+//for of可用，重新Symbol.iterator使其与length相关联触发相关副作用函数，在get拦截方法中对Symbol.iterator没必要存到追踪中，所以排除typeof target是symbol的
 // list[Symbol.iterator] = function () {
 //   const target = this;
 //   const len = target.length;
@@ -367,4 +367,5 @@ const obj = {};
 const arr = reactive([obj]);
 
 console.log(arr.includes(arr[0])); //true
+//因为includes内部的this指向的是代理对象arr，并且在获取数组元素时得到的值也是代理对象，需要对includes进行重写
 console.log(arr.includes(obj)); // false
