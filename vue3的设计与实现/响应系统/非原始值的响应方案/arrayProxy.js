@@ -21,6 +21,10 @@ const reactiveMap = new Map();
 
 const p = reactive(data);
 
+//隐形调用length属性调用stack导致死循环，重写栈方法
+let shouldTask = true;
+//重写数组方法 includes
+const arrayInstrumentations = {};
 function reactive(obj) {
   //优先通过原始对象寻找之前创建的代理对象，没有的话再进行创建
   const existionProxy = reactiveMap.get(obj);
@@ -37,8 +41,6 @@ function readonly(obj) {
   return createReactive(obj, false, true);
 }
 
-//重写数组方法 includes
-const arrayInstrumentations = {};
 ["includes", "indexOf", "lastIndexOf"].forEach((method) => {
   const originMethod = Array.prototype[method];
   arrayInstrumentations[method] = function (...args) {
@@ -48,6 +50,16 @@ const arrayInstrumentations = {};
     if (res === false) {
       res = originMethod.apply(this.raw, args);
     }
+    return res;
+  };
+});
+
+["push", "pop", "shift", "unshift", "splice"].forEach((method) => {
+  const originMethod = Array.prototype[method];
+  arrayInstrumentations[method] = function (...args) {
+    shouldTask = false;
+    let res = originMethod.apply(this, args);
+    shouldTask = true;
     return res;
   };
 });
@@ -69,9 +81,6 @@ function createReactive(data, isShallow = false, isReadonly = false) {
       }
       //"" 对于obj.foo.bar这类深响应做处理，不做处理的话修改obj.foo.bar不会触发副作用函数
       let res = Reflect.get(target, key, receiver);
-
-      console.log("get:", target, key);
-
       //"" 浅响应obj.foo可以响应 obj.foo.bar不响应
       if (isShallow) {
         return res;
@@ -134,7 +143,6 @@ function createReactive(data, isShallow = false, isReadonly = false) {
         console.warn(`${key} 属性是只读属性`);
         return true;
       }
-      console.log("deleteProperty", target, key);
       //检查属性是否属于target
       let hadKey = Object.prototype.hasOwnProperty.call(target, key);
       //使用Reflect.deletePrototype删除
@@ -149,7 +157,7 @@ function createReactive(data, isShallow = false, isReadonly = false) {
 //在get拦截函数内调用track函数追踪变化
 function track(target, key) {
   //没有副作用函数直接return
-  if (!activeEffect) return target[key];
+  if (!activeEffect || !shouldTask) return target[key];
   //根据target从桶中取得depsMap,它也是一个Map类型
   let depsMap = bucket.get(target);
   //如果depsMap不存在，需要新建一个Map与target关联
@@ -373,3 +381,9 @@ console.log(arr.includes(arr[0])); //true
 console.log(arr.includes(obj));
 
 console.log(arr.indexOf("1"));
+
+const arrTest = reactive([]);
+arrTest.push(1);
+console.log("1", arrTest);
+arrTest.push(2);
+console.log("2", arrTest);

@@ -23,3 +23,7 @@ const p = new Proxy(obj, {
   }
 });
 p.bar;
+
+const s = new Set();
+const proxyTest = new Proxy(s, {});
+console.log(proxyTest.size);
